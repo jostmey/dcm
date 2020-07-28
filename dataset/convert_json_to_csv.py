@@ -20,6 +20,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--db', help='Path to the json database', type=str, required=True)
 parser.add_argument('--output', help='Basename for CSV output files', type=str, required=True)
 parser.add_argument('--degenerate', help='Number of allowed degenerate peptides', type=int, default=-1)
+parser.add_argument('--min_cdr3', help='Minimum allowed CDR3 length', type=int, default=-1)
+parser.add_argument('--max_cdr3', help='Maximum allowed CDR3 length', type=int, default=-1)
 args = parser.parse_args()
 
 ##########################################################################################
@@ -30,7 +32,7 @@ with open(args.db, 'r') as stream:
   db = json.load(stream)
 
 ##########################################################################################
-# Remove degenerate peptides
+# Filter samples
 ##########################################################################################
 
 if args.degenerate > -1:
@@ -41,6 +43,26 @@ if args.degenerate > -1:
         peptides_del.add(peptide)
     for peptide in peptides_del:
       del db[split][peptide]
+
+if args.min_cdr3 > -1:
+  for split in [ 'train', 'validate', 'test' ]:
+    for cdr3s in db[split].values():
+      cdr3s_del = set()
+      for cdr3 in cdr3s.keys():
+        if len(cdr3) < args.min_cdr3:
+          cdr3s_del.add(cdr3)
+      for cdr3 in cdr3s_del:
+        del cdr3s[cdr3]
+
+if args.max_cdr3 > -1:
+  for split in [ 'train', 'validate', 'test' ]:
+    for cdr3s in db[split].values():
+      cdr3s_del = set()
+      for cdr3 in cdr3s.keys():
+        if len(cdr3) > args.max_cdr3:
+          cdr3s_del.add(cdr3)
+      for cdr3 in cdr3s_del:
+        del cdr3s[cdr3]
 
 ##########################################################################################
 # Save datasets
