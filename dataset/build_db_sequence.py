@@ -22,6 +22,8 @@ path_db = 'db_sequence.json'
 
 generative_split = [ 0.6, 0.2, 0.2 ]
 
+random.seed(2179973)
+
 ##########################################################################################
 # Load
 ##########################################################################################
@@ -61,8 +63,8 @@ for peptide in samples.keys():
   else:
     peptides_unique.add(peptide)
 
-peptides_unique = list(peptides_unique)
-peptides_degen = list(peptides_degen)
+peptides_unique = sorted(list(peptides_unique))
+peptides_degen = sorted(list(peptides_degen))
 
 ##########################################################################################
 # Split samples into a training, validation, and test cohort
