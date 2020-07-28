@@ -32,7 +32,7 @@ with open(args.db, 'r') as stream:
 # Save datasets
 ##########################################################################################
 
-for split in [ 'train', 'validate', 'test', 'all' ]:
+for split in [ 'train', 'validate', 'test' ]:
   with open(args.output+'_'+split+'.csv', 'w') as stream:
     print(
       'CDR3', 'Vgene', 'Jgene', 'Peptide', 'Frequency', 'Experiment',
