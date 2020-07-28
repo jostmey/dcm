@@ -20,7 +20,7 @@ path_db_gen = 'db_sequence.json'
 path_db_class = 'db_category.json'
 
 classification_split = [ 0.6, 0.2, 0.2 ]
-min_count = 5
+min_count = 100
 
 random.seed(7424103)
 
@@ -43,9 +43,9 @@ db_class = {
 }
 
 for split_gen in [ 'train', 'validate' ]:
-#  for peptide in sorted(db_gen[split_gen].keys()):
-#    cdr3s = db_gen[split_gen][peptide]
-  for peptide, cdr3s in db_gen[split_gen].items():
+  samples = db_gen[split_gen]
+  for peptide in sorted(samples.keys()):
+    cdr3s = samples[peptide]
     if len(cdr3s) >= min_count:
       cdr3s_list = sorted(list(cdr3s.keys()))
       random.shuffle(cdr3s_list)
