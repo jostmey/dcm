@@ -40,7 +40,7 @@ with open(path_csv, 'r') as stream:
     peptide = ','.join(peptide_list)
     if peptide not in samples:
       samples[peptide] = {}
-    if cdr3 not in peptide:
+    if cdr3 not in samples[peptide]:
       samples[peptide][cdr3] = []
     samples[peptide][cdr3].append(
       {
