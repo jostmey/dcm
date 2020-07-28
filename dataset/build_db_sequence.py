@@ -35,19 +35,20 @@ with open(path_csv, 'r') as stream:
     cdr3, vgene, jgene = row['TCR BioIdentity'].split('+')
     experiment = row['Experiment']
     peptide = row['Amino Acids']
-    peptide_list = peptide.split(',')
-    peptide_list.sort()
-    peptide = ','.join(peptide_list)
-    if peptide not in samples:
-      samples[peptide] = {}
-    if cdr3 not in samples[peptide]:
-      samples[peptide][cdr3] = []
-    samples[peptide][cdr3].append(
-      {
-        'vgene': vgene,
-        'jgene': jgene,
-        'experiment': experiment  
-      }
+    if '*' not in cdr3:
+      peptide_list = peptide.split(',')
+      peptide_list.sort()
+      peptide = ','.join(peptide_list)
+      if peptide not in samples:
+        samples[peptide] = {}
+      if cdr3 not in samples[peptide]:
+        samples[peptide][cdr3] = []
+      samples[peptide][cdr3].append(
+        {
+          'vgene': vgene,
+          'jgene': jgene,
+          'experiment': experiment  
+        }
     )
 
 ##########################################################################################
