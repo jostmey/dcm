@@ -38,10 +38,13 @@ for split in [ 'train', 'validate', 'test', 'all' ]:
       'CDR3', 'Vgene', 'Jgene', 'Peptide', 'Frequency', 'Experiment',
       sep=',', file=stream
     )
-    num_peptides = len(db[split])
-    for peptide, cdr3s in db[split].items():
+    samples = db[split]
+    num_peptides = len(samples)
+    for peptide in sorted(samples.keys()):
+      cdr3s = samples[peptide]
       num_cdr3s = len(cdr3s)
-      for cdr3, entries in cdr3s.items():
+      for cdr3 in sorted(cdr3s.keys()):
+        entries = cdr3s[cdr3]
         peptide_ = ':'.join(peptide.split(','))
         num_entries = len(entries)
         for entry in entries:
