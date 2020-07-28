@@ -43,9 +43,11 @@ db_class = {
 }
 
 for split_gen in [ 'train', 'validate' ]:
+#  for peptide in sorted(db_gen[split_gen].keys()):
+#    cdr3s = db_gen[split_gen][peptide]
   for peptide, cdr3s in db_gen[split_gen].items():
     if len(cdr3s) >= min_count:
-      cdr3s_list = sorted(list(cdr3s))
+      cdr3s_list = sorted(list(cdr3s.keys()))
       random.shuffle(cdr3s_list)
       cumulative_split = 0.0
       splits = [ 0 ]
@@ -54,22 +56,26 @@ for split_gen in [ 'train', 'validate' ]:
         splits.append(
           int(cumulative_split*len(cdr3s))
         )
-      db_class['train'][peptide] = []
+      db_class['train'][peptide] = {}
       for i in range(splits[0], splits[1]):
         cdr3 = cdr3s_list[i]
-        db_class['train'][peptide].append(cdr3s[cdr3])
-      db_class['validate'][peptide] = []
+        entries = cdr3s[cdr3]
+        db_class['train'][peptide][cdr3] = entries
+      db_class['validate'][peptide] = {}
       for i in range(splits[1], splits[2]):
         cdr3 = cdr3s_list[i]
-        db_class['validate'][peptide].append(cdr3s[cdr3])
-      db_class['test'][peptide] = []
+        entries = cdr3s[cdr3]
+        db_class['validate'][peptide][cdr3] = entries
+      db_class['test'][peptide] = {}
       for i in range(splits[2], splits[3]):
         cdr3 = cdr3s_list[i]
-        db_class['test'][peptide].append(cdr3s[cdr3])
-      db_class['all'][peptide] = []
+        entries = cdr3s[cdr3]
+        db_class['test'][peptide][cdr3] = entries
+      db_class['all'][peptide] = {}
       for i in range(splits[0], splits[3]):
         cdr3 = cdr3s_list[i]
-        db_class['all'][peptide].append(cdr3s[cdr3])
+        entries = cdr3s[cdr3]
+        db_class['all'][peptide][cdr3] = entries
 
 ##########################################################################################
 # Save the database
