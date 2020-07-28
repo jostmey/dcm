@@ -17,7 +17,7 @@ import json
 # Settings
 ##########################################################################################
 
-path_csv = '../../../Public Data/T-cell_Human_ImmuneCODE-MIRA_Adaptive-Biotech/Samples/20200625/peptide-detail.csv'
+path_csv = 'peptide-detail.csv'
 path_db = 'db_sequence.json'
 
 generative_split = [ 0.6, 0.2, 0.2 ]
