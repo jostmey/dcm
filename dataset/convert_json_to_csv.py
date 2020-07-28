@@ -19,6 +19,7 @@ import json
 parser = argparse.ArgumentParser()
 parser.add_argument('--db', help='Path to the json database', type=str, required=True)
 parser.add_argument('--output', help='Basename for CSV output files', type=str, required=True)
+parser.add_argument('--degenerate', help='Number of allowed degenerate peptides', type=int, default=-1)
 args = parser.parse_args()
 
 ##########################################################################################
@@ -27,6 +28,19 @@ args = parser.parse_args()
 
 with open(args.db, 'r') as stream:
   db = json.load(stream)
+
+##########################################################################################
+# Remove degenerate peptides
+##########################################################################################
+
+if args.degenerate > -1:
+  for split in [ 'train', 'validate', 'test' ]:
+    peptides_del = set()
+    for peptide in db[split].keys():
+      if peptide.count(',') > args.degenerate:
+        peptides_del.add(peptide)
+    for peptide in peptides_del:
+      del db[split][peptide]
 
 ##########################################################################################
 # Save datasets
