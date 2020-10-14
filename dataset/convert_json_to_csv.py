@@ -11,6 +11,7 @@
 
 import argparse
 import json
+import random
 
 ##########################################################################################
 # Settings
@@ -22,6 +23,7 @@ parser.add_argument('--output', help='Basename for CSV output files', type=str, 
 parser.add_argument('--degenerate', help='Number of allowed degenerate peptides', type=int, default=-1)
 parser.add_argument('--min_cdr3', help='Minimum allowed CDR3 length', type=int, default=-1)
 parser.add_argument('--max_cdr3', help='Maximum allowed CDR3 length', type=int, default=-1)
+parser.add_argument('--permute', help='Permute training samples', type=bool, default=False)
 args = parser.parse_args()
 
 ##########################################################################################
@@ -63,6 +65,16 @@ if args.max_cdr3 > -1:
           cdr3s_del.add(cdr3)
       for cdr3 in cdr3s_del:
         del cdr3s[cdr3]
+
+if args.permute:
+  for split in [ 'train', 'validate', 'test' ]:
+    peptides = list(db[split].keys())
+    peptides_ = list(db[split].keys())
+    random.shuffle(peptides_)
+    db_split = {}
+    for peptide, peptide_ in zip(peptides, peptides_):
+      db_split[peptide] = db[split][peptide_]
+    db[split] = db_split
 
 ##########################################################################################
 # Save datasets
